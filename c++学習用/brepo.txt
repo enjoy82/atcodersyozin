@@ -1,0 +1,236 @@
+レポート１１B
+
+@@@ 1810654 谷津直弥
+
+選択した課題1:演習3
+
+方針1: 課題をどのようにして解くかの方針説明---数行以上
+分割統治するところまではコードがかかれているので、２つの配列を受け取って、マージソートしていく部分を作っていく。
+
+コード1: プログラム一式(動くものを貼ること)
+// mergesort2 --- merge sort with recuresive division
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+void merge(int *res, int *a, int a_len, int *b, int b_len){
+	int i = 0;int j = 0;
+	while(a_len > i || b_len > j){
+		if(j>=b_len || (i<a_len && a[i] < b[j])){
+			res[i+j] = a[i];
+			i++;
+		}else{
+			res[i+j] = b[j];
+			j++;
+		}
+	}
+}
+static void ms(int *a, int i, int j, int *b) {
+  if(i >= j) { return; }
+  int k = (i + j) / 2;
+  ms(a, i, k, b); ms(a, k+1, j, b);
+  merge(b, a+i, k-i+1, a+k+1, j-k);
+  for(k = 0; k < j-i+1; ++k) { a[i+k] = b[k]; }
+}
+void mergesort2(int *a, int n) {
+  int *b = (int*)malloc(n * sizeof(int)); ms(a, 0, n-1, b); free(b);
+}
+
+void expect_sort_iarray(int n, void (*f)(int *a, int m), char *msg) {
+  int c = 0;
+  int *a = (int*)malloc(n * sizeof(int));
+  srand(time(NULL));
+  for(int i = 0; i < n; ++i) { a[i] = rand()%10000; }
+  struct timespec tm1, tm2;
+  clock_gettime(CLOCK_REALTIME, &tm1);
+  (*f)(a, n);
+  clock_gettime(CLOCK_REALTIME, &tm2);
+  for(int i = 1; i < n; ++i) {
+    if(a[i-1] <= a[i]) { continue; } // correct order
+    if(++c < 5) {
+      printf("  wrong order at %d: %d > %d\n", i-1, a[i-1], a[i]);
+    } else if(c == 5) {
+      printf("  more wrong place omitted.\n");
+    }
+  }
+  double dt = (tm2.tv_sec-tm1.tv_sec) + 1e-9*(tm2.tv_nsec-tm1.tv_nsec);
+  printf("%s time=%.4f %s\n", c==0?"OK":"NG", dt, msg); 
+  for(int i = 0; i < n; ++i) { printf(" %d", a[i]); }
+  printf("\n");
+  free(a);
+}
+
+int main(int argc, char *argv[]) {
+  int n = atoi(argv[1]);
+  expect_sort_iarray(n, mergesort2, "mergesort2");
+  return 0;
+}
+
+
+実行例1: 適宜(グラフィクス等実行例がテキストで作れないものは除く)
+ ./a.out 10
+OK time=0.0000 mergesort2
+ 2320 3264 4676 4754 4884 7148 7402 8495 8697 8844
+./a.out 13
+OK time=0.0000 mergesort2
+ 117 916 1756 2641 3248 3969 4509 5930 6865 7644 8133 8644 9843
+
+(以降、時間計測のみとする。）
+./a.out 100
+OK time=0.0000 mergesort2
+./a.out 1000
+OK time=0.0001 mergesort2
+ ./a.out 5000
+OK time=0.0006 mergesort2
+./a.out 10000
+OK time=0.0012 mergesort2
+ ./a.out 100000
+OK time=0.0147 mergesort2
+
+
+解説1: プログラムの説明ひととおり(きちんとここで説明すること)
+分割統治はやってくれているので、分割されたものをマージしていくコードのみ書いている。
+２つの配列と作業用配列が渡されているので、配列のポインタで受け取ってあげて、配列をwhile文で回して大きい順に作業用配列に突っ込んでいくようにした。
+
+考察1: 課題をやって分かったこと---数行以上
+分割統治によるマージソートでは細かく配列を分けてあげることで、バブルソートのように計算量が指数関数的にはねあがることを防いでいる。計算量は最終的に２分割して、それを要素分比較を行ない、これは分割、マージ時どちらにもかかるので、２nlognとなる。これは実行例を見ても明らかである。
+マージソートでは大小比較を連続しておこなっているので、マージ時に常に先頭要素のみをみるだけでよいので、考え方が楽で再帰関数で実行しているため直感的に理解できるなと思った。
+
+
+選択した課題2: 演習４
+
+方針2: 課題をどのようにして解くかの方針説明---数行以上
+ひな形に単体テストを張り付けることで、クイックソートをまず完成させる。
+そのあと、別関数で整列されているものを仲介するようにしてその時の挙動を観測する。
+ピボットのランダム生成は、rand関数のあまりをとって、一度配列の範囲の最後尾に逃がすことでつくった。
+
+コード2: プログラム一式(動くものを貼ること)
+・ひな形のみのクイックソート
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <time.h>
+
+static void iswap(int *a, int i, int j) {
+  int x = a[i]; a[i] = a[j]; a[j] = x;
+}
+void qs(int *a, int i, int j) {
+  if(j <= i) { return; }
+  int s = i, pivot = a[j];
+  for(int k = i; k < j; ++k) {
+    if(a[k] < pivot) { iswap(a, s++, k); }
+  }
+  iswap(a, j, s); qs(a, i, s-1); qs(a, s+1, j);
+}
+void quicksort(int *a, int n) { qs(a, 0, n-1); }
+
+void expect_sort_iarray(int n, void (*f)(int *a, int n), char *msg) {
+  int c = 0, *a = (int*)malloc(n * sizeof(int));
+  srand(time(NULL));
+  for(int i = 0; i < n; ++i) { a[i] = rand()%10000; }
+  struct timespec tm1, tm2;
+  clock_gettime(CLOCK_REALTIME, &tm1);
+  (*f)(a, n);
+  clock_gettime(CLOCK_REALTIME, &tm2);
+  for(int i = 1; i < n; ++i) {
+    if(a[i-1] <= a[i]) { continue; } // correct order
+    if(++c < 5) {
+      printf("  wrong order at %d: %d > %d\n", i-1, a[i-1], a[i]);
+    } else if(c == 5) {
+      printf("  more wrong place omitted.\n");
+    }
+  }
+  double dt = (tm2.tv_sec-tm1.tv_sec) + 1e-9*(tm2.tv_nsec-tm1.tv_nsec);
+  printf("%s time=%.4f %s\n", c==0?"OK":"NG", dt, msg); free(a);
+}
+
+int main(int argc, char *argv[]) {
+  int n = atoi(argv[1]);
+  expect_sort_iarray(n, quicksort, "quicksort");
+  return 0;
+}
+
+・整列された配列をわたすとき
+for(int i = 0; i < n; ++i) { a[i] = rand()%10000; }
+↓
+for(int i = 0; i < n; ++i) { a[i] = i; }
+のように変更した。
+
+・ピポットのランダム生成
+  int p = rand()%(j-i)+i;
+  int s = i, pivot = a[p];
+  iswap(a, p, j);
+  としてランダムな値の最後尾にした。
+
+実行例2: 適宜(グラフィクス等実行例がテキストで作れないものは除く)
+・ひな形のクイックソートにおける時間と単体テスト結果
+a.exe 10
+OK time=0.0000 quicksort
+a.exe 100
+OK time=0.0000 quicksort
+a.exe 1000
+OK time=0.0000 quicksort
+a.exe 10000
+OK time=0.0020 quicksort
+a.exe 100000
+OK time=0.0130 quicksort
+a.exe 1000000
+OK time=0.3143 quicksort
+a.exe 10000000
+OK time=12.7755 quicksort
+
+・整列ずみ配列を渡す
+a.exe 10
+OK time=0.0000 quicksort
+OK time=0.0000 quicksort2
+a.exe 100
+OK time=0.0000 quicksort
+OK time=0.0000 quicksort2
+a.exe 1000
+OK time=0.0000 quicksort
+OK time=0.0030 quicksort2
+a.exe 10000
+OK time=0.0010 quicksort
+OK time=0.2738 quicksort2
+
+・改善後
+a.exe 10
+OK time=0.0000 quicksort
+OK time=0.0000 quicksort2
+a.exe 100
+OK time=0.0000 quicksort
+OK time=0.0000 quicksort2
+a.exe 1000
+OK time=0.0000 quicksort
+OK time=0.0000 quicksort2
+a.exe 10000
+OK time=0.0020 quicksort
+OK time=0.0020 quicksort2
+a.exe 100000
+OK time=0.0150 quicksort
+OK time=0.0110 quicksort2
+a.exe 1000000
+OK time=0.2599 quicksort
+OK time=0.1819 quicksort2
+a.exe 10000000
+OK time=14.1855 quicksort
+OK time=8.6758 quicksort2
+
+
+解説2: プログラムの説明ひととおり(きちんとここで説明すること)
+ひな形を改造することでプログラムをつくっていく。整列ずみの配列を作るときは簡単にfor文で綺麗にできた配列をわたした。
+ピボットをランダムにつくるときは持っている配列の要素数を乱数のあまりから選択することで、配列の中のランダム要素をピボットとした。
+一度逃がしてあげることで後で値を追うことをなくした。
+
+考察2: 課題をやって分かったこと---数行以上
+クイックソートのおおよその計算量はnlognである。これは実行例からも明らかである。もし整列済み配列をわたすと今回はピボットを右から選んでいるので、１つずつ分割されていくので、やっていることはバブルソートと同じく１文字ずつ確定させているだけなので、計算量はn^2となってしまっている。そこでピボットの選択をランダムにすることで解消することができた。
+ピボットをランダムにした後はむしろ整列されてあるほうはswapを呼び出す回数が格段と減るので、かなり計算時間を落とすことができた。データに対して適切なデータ機構を選ぶことはかなり計算時間に影響すると感じた。
+
+アンケート: アンケート再掲+回答
+Q1. 自力で書ける整列アルゴリズムは何と何でしょう。
+quickソート、マージソート、セレクトソート、バブルソート、ヒープソート
+Q2. 整列が安定かどうか判断できるようになりましたか。
+毎回単体テスト以外に動的にチェックしてデバッグしているのでなんとなくは
+Q3. リフレクション(今回の課題で分かったこと)・感想・要望をどうぞ。
+特になし。

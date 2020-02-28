@@ -1,0 +1,238 @@
+基礎プログラミングおよび演習レポート ＃11
+学籍番号:1810654
+氏名:谷津　直弥
+ペア学籍番号・氏名(または「個人作業」):
+提出日付:18/12/26
+
+[課題の再掲]
+演習１hiを除いたもの
+演習３
+
+[実施したこととその結果]
+演習１
+a
+・作成したプログラム
+#include <stdio.h>
+double ensui(double r, double h) {
+    double v;
+    v = (r * r * 3.14 * h) / 3.0;
+    return v;
+}
+int main(void) {
+double r, h, v;
+printf("r> "); scanf("%lf", &r);
+printf("h> "); scanf("%lf", &h);
+v = ensui(r, h);
+printf("ensui = %g\n", v);
+return 0;
+}
+
+・実行結果
+[y1810654@itc248 11]$ gcc 1a.c -lm
+[y1810654@itc248 11]$ ./a.out
+r> 3
+h> 5
+ensui = 47.1
+
+b
+・作成したプログラム
+#include <stdio.h>
+#include <math.h>
+
+int main(void)
+{
+    double b;
+    printf("求めたい数>"); scanf("%lf", &b);
+    double a = pow(b, 0.5);
+    printf("その平方根は %g\n", a);
+    return 0;
+}
+
+・実行結果
+[y1810654@itc248 11]$ gcc 1b.c -lm
+[y1810654@itc248 11]$ ./a.out
+求めたい数>3
+その平方根は 1.73205
+
+c
+・作成したプログラム
+#include <stdio.h>
+#include <math.h>
+
+int main(void)
+{
+    double b;
+    printf("求めたい数>"); scanf("%lf", &b);
+    double a = pow(b, 8);
+    printf("その8乗は %g\n", a);
+    return 0;
+}
+
+・実行結果
+[y1810654@itc248 11]$ gcc 1c.c -lm
+[y1810654@itc248 11]$ ./a.out
+求めたい数>2
+その8乗は 256
+
+d,e(めんどうくさいのでくっつけました)
+・作成したプログラム
+#include <stdio.h>
+
+int main(void)
+{
+    double a, b, j;
+    printf("数> "); scanf("%lf", &a);
+    printf("数> "); scanf("%lf", &b);
+    printf("大きい数を求めたいなら0、小さい数を求めたいなら1"); scanf("%lf", &j);
+    if (j == 0) {
+        if (a < b) {
+            printf("%g\n", b);
+        }else {
+            printf("%g\n", a);
+        }
+    }else {
+        if (a < b) {
+            printf("%g\n", a);
+        }else {
+            printf("%g\n", b);
+        }
+    }
+    return 0;
+}
+
+・実行結果
+[y1810654@itc248 11]$ ./a.out
+数> 2
+数> 5
+大きい数を求めたいなら0、小さい数を求めたいなら11
+2
+[y1810654@itc248 11]$ ./a.out
+数> 2
+数> 5
+大きい数を求めたいなら0、小さい数を求めたいなら10
+5
+
+f,g
+・作成したプログラム
+#include <stdio.h>
+
+int main(void)
+{
+    double a, b, c, d, j;
+    printf("数1> "); scanf("%lf", &a);
+    printf("数2> "); scanf("%lf", &b);
+    printf("数3> "); scanf("%lf", &c);
+    printf("最大値を求めたいなら0、最小値を求めたいなら1>"); scanf("%lf", &j);
+    if (j == 0) {
+        if (a <= b) {
+            d = b;
+        } else {
+            d = a;
+        }
+        if (d <= c) {
+            d = c;
+        }else {
+        }
+    }
+    if (j == 1) {
+        if (a <= b) {
+            d = a;
+        } else {
+            d = b;
+        }
+        if (d <= c) {
+        }else {
+            d = c;
+        }
+    }
+    printf("%g\n", d);
+}
+
+・実行結果
+[y1810654@itc248 11]$ ./a.out
+数1> 1
+数2> 2
+数3> 3
+最大値を求めたいなら0、最小値を求めたいなら1>0
+3
+[y1810654@itc248 11]$ ./a.out
+数1> 1
+数2> 5
+数3> 2
+最大値を求めたいなら0、最小値を求めたいなら1>1
+1
+
+j,k
+・作成したプログラム
+#include <stdio.h>
+
+int main(void)
+{
+    int i;
+    double n, j;
+    double ans1 = 2;
+    printf("n> "); scanf("%lf", &n);
+    double ans2 = n;
+    printf("べき乗なら0、階乗なら1>"); scanf("%lf", &j);
+    if (j == 0) {
+        for (i = 1; i < n; i++){
+            ans1 = ans1 * 2;
+        }
+        printf("%g\n", ans1);
+    }
+    else {
+        for (i = 1; i < n; i++){
+            ans2 = ans2 * (n-i);
+        }
+        printf("%g\n", ans2);
+    }
+return 0;
+}
+
+・実行結果
+[y1810654@itc248 11]$ ./a.out
+n> 2
+べき乗なら0、階乗なら1>0
+4
+[y1810654@itc248 11]$ ./a.out
+n> 3
+べき乗なら0、階乗なら1>1
+6
+
+演習3
+・作成したプログラム
+#include <stdio.h>
+
+int main(void)
+{
+    double i;
+    double c;
+    double count;
+    printf("n>"); scanf("%lf", &i);
+    for (count = 0;  count <= i; count = count + 0.00001){
+        c = count * count;
+        if (c >= i){
+            printf("%g\n", count);
+            break;
+        }
+    }
+return 0;
+}
+
+・実行結果
+[y1810654@itc013 11]$ ./a.out
+n>2
+1.41422
+このように2の平方根は1.414213であり、この時点では正確である。
+
+[考察]
+rubyと違い、標準出力に対するプログラムも組まなければいけないが、大してつらくなかった。演習１はほぼ授業中に終わらせることもできたため、問題なし。
+演習３に関してわかったことはC言語ではデフォルトではfloat型で数値処理されるということだ。今回の結果では平方根を求めているが、少なくとも小数６位までは正確に計算できており、一般に使う分にはまったく問題ないと感じた。もう少しどこまで正確にどのくらいで不正確な値が出るかは計算方法によっても違うだろう。今回は適当に繰り返しを使って処理しているので、その方法で総当り的に計算していくとフリーズすることが目に見えているのでやめた。感じたこととしてやはりC言語ははやいなと感じた。rubyだと少し時間を要求することでもすぐにできるため、スピードを要求するものや根幹となるプログラムを書く時には必須のプログラムだなと感じた。その分はやくチューニングするにはメモリなども気にする必要があるのは聞いているので奥が深い言語だなと感じた。
+
+[アンケート]
+Q1. C言語でプログラムが書けるようになりましたか。
+rubyで書いたことがあるの程度は書けます
+Q2. CとRubyはどのように違うと感じていますか。
+rubyは完璧にオブジェクトなので殴り書きで適当につなげばいいが、Cはそういかないところ
+Q3. リフレクション(今回の課題で分かったこと)・感想・要望をどうぞ。
+とくになし
