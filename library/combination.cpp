@@ -7,6 +7,8 @@ const int MAX = 510000; //テーブルの数
 const int MOD = 1000000007; //mod宣言
 
 long long fac[MAX], finv[MAX], inv[MAX];
+// finv ->階乗割り算
+// fac ->階乗掛け算
 
 // テーブルを作る前処理
 void COMinit() {
