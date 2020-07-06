@@ -17,14 +17,14 @@ int dy[4] = {0, 0, 1, -1};
 
 const ll mod = 1e9+7;
 
-#define MAX_V 10000000
-#define INF 100000000
+#define MAX_V 200
+#define INF 150000000
 
 struct edge{int to, cost;};
 typedef pair<int, int> P; //first is shortest distance, second is number.
 
 vector<edge> G[MAX_V];
-int d[MAX_V];
+ll d[MAX_V];
 
 void dijkstra(int s, int V){
     priority_queue<P, vector<P>, greater<P> > que;
@@ -58,5 +58,23 @@ int main(){
         G[x].pb({y, 1});
         G[y].pb({x, 1});
     }
-    
+    dijkstra(a, n);
+    vector<vector<ll> > tpo(n, vector<ll>(2, 0));
+    REP(i, 0, n){
+        tpo[i][0] = d[i];
+        tpo[i][1] = i;
+    }
+    vector<ll> anslis(n, 0);
+    anslis[a] = 1;
+    sort(ALL(tpo), [](auto &x, auto &y){return x[0] < y[0];});
+    REP(i, 0, n){
+        int now = tpo[i][1];
+        REP(l, 0, G[now].size()){
+            int next = G[now][l].to;
+            if(d[next] > d[now])
+                anslis[next] = (anslis[next] + anslis[now])%mod;
+        }
+    }
+    cout << anslis[b] << endl;
+    return 0;
 }

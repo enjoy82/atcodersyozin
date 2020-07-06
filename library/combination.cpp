@@ -3,8 +3,8 @@ typedef long long ll;
 using namespace std;
 
 
-const int MAX = 510000; //テーブルの数
-const int MOD = 1000000007; //mod宣言
+const ll MAX = 1000000; //テーブルの数
+const ll MOD = 1e9+7; //mod宣言
 
 long long fac[MAX], finv[MAX], inv[MAX];
 // finv ->階乗割り算
@@ -26,7 +26,7 @@ void COMinit() {
 long long COM(int n, int k){
     if (n < k) return 0;
     if (n < 0 || k < 0) return 0;
-    return fac[n] * (finv[k] * finv[n - k] % MOD) % MOD;
+    return (fac[n] * (finv[k] * finv[n - k] % MOD)) % MOD;
 }
 
 int main() {
