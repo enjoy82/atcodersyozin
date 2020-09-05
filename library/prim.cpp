@@ -4,6 +4,8 @@ using namespace std;
 #define MAX_V 10000000
 #define INF 100000000
 
+//クラスカル使え！！！
+
 typedef pair<int,int> pii; // (cst, to)
 vector<pii> G[MAX_V];
 bool used[MAX_V];

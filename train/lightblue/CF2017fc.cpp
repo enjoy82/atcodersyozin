@@ -17,40 +17,65 @@ char alpha[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm
 
 int dx[4] = {-1, 1, 0, 0};
 int dy[4] = {0, 0, 1, -1};
+template<class T>
+inline bool chmax(T &a, T b) {
+    if(a < b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+ 
+template<class T>
+inline bool chmin(T &a, T b) {
+    if(a > b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+
 
 int main(){
     int n; cin >> n;
-    vector<int> lis(13, 0), lis2;
-    lis[0]++;
+    vector<int> flag(13, 0);
+    flag[0]++;
     REP(i, 0, n){
         int a; cin >> a;
-        lis[a]++;
-    }
-    REP(i, 0, 13){
-        if(lis[i] > 0){lis2.pb(i);}
-        if(lis[i] > 1){lis2.pb(i);}
+        flag[a]++;
     }
     int ans = 0;
-    n = lis2.size();
-    if(n == 1){
-        cout << 0 << endl;
-        return 0;
-    }else{
-        REP(i, 0, (1 << n)){
-            int mid = 24;
-            vector<int> cp = lis2;
-            REP(l, 0, n){
-                if(i & 1 == 1){
-                    cp[l] = 24 - cp[l];
+    REP(i, 0, (1 << 12)){
+        vector<int> used(25, 0);
+        used[0] = flag[0];
+        used[12] = flag[12];
+        int s = 1e9;
+        REP(l, 0, 13) {
+            if(flag[0] == 0) continue;
+            if(flag[l] == 2) {
+                used[l] = used[24-l] = 1;
+            }
+            if(flag[l] == 1){
+                if((i & (1 << (l-1))) == 1){
+                    used[24-l] = 1;
+                }else{
+                    used[l] = 1;
                 }
             }
-            REP(l, 0, n-1){
-                REP(k, l+1, n){
-                    mid = min(mid, abs(cp[l]-cp[k]));
-                }
+            if(flag[l] >= 3){
+                s = 0;
             }
-            ans = max(ans, mid);
         }
+        REP(l, 0, 25){
+            REP(k, 0, 25){
+                if(l != k && used[l] == 1 && used[k] == 1){
+                    int mid = min(abs(l-k) , 24 - abs(l-k));
+                    chmin(s, mid);
+                }
+            }
+        }
+        //cout << s << endl;
+        chmax(ans, s);
     }
     cout << ans << endl;
 }

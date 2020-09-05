@@ -6,7 +6,7 @@ using namespace std;
 using Pii = pair<int, int>;
 using Pll = pair<ll, ll>;
 
-#define REP(i, l, n) for(ll i=(l), i##_len=(n); i<i##_len; ++i)
+#define REP(i, l, n) for(int i=(l), i##_len=(n); i<i##_len; ++i)
 #define ALL(x) (x).begin(),(x).end()
 #define pb push_back
 
@@ -37,17 +37,37 @@ int dx[4] = {-1, 1, 0, 0};
 int dy[4] = {0, 0, 1, -1};
 
 int main(){
-    ll n; cin >> n;
-    ll tsum = 0;
-    REP(i, 1, n+1){
-        tsum += i * (n+1 - i);
-    }
-    REP(i, 0, n-1){
-        ll a, b; cin >> a >> b;
-        if(a > b){
-            ll x = a; a = b; b = x;
+    int n, m; cin >> n >> m;
+    string s; cin >> s;
+    reverse(ALL(s));
+    vector<int> ans;
+    int now = 0;
+    while(1){
+        int next = 0;
+        int f = 0;
+        REP(i, 1, m+1){
+            if(s[now + i] == '0'){
+                if(now+i == n){
+                    ans.pb(i);
+                    f = 1;
+                    break;
+                }
+                chmax(next, i);
+            }
         }
-        tsum -= a * (n-b+1);
+        if(f){
+            break;
+        }
+        if(next == 0){
+            cout << -1 << endl;
+            return 0;
+        }else{
+            ans.pb(next);
+            now = now + next;
+        }
     }
-    cout << tsum << endl;
+    REP(i, 0, ans.size()){
+        cout << ans[ans.size()-i-1] << " ";
+    }
+    cout << endl;
 }
