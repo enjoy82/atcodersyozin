@@ -18,72 +18,22 @@ char alpha[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm
 int dx[4] = {-1, 1, 0, 0};
 int dy[4] = {0, 0, 1, -1};
 
-int ans = 0;
-
-void solve(string a, string b, int num, int f){
-    if(num > 3){
-        return;
-    }
-    if(a == b && num == 3){
-        ans = 1;
-        return;
-    }
-    if(a == b && f == 1){
-        ans = 1;
-        return;
-    }
-    string c = a, cc = b;
-    REP(i, 0, a.size()-1){
-        REP(l, 0, a.size()){
-            if(i == l){continue;}
-            char x = c[i]; c[i] = c[l]; c[l] = x;
-            solve(c, cc, num+1, f);
-            x = c[i]; c[i] = c[l]; c[l] = x;
-        }
-    }
-}
-
 int main(){
-    string a, b; cin >> a >> b;
-    if(a.size() == 1){
-        cout << "NO" << endl;
-        return 0;
-    }
-    vector<int> alpha(26, 0), alpha2(26, 0);
-    REP(i, 0, a.size()){
-        alpha[a[i] - 'a']++;
-    }
-    REP(i, 0, a.size()){
-        alpha2[b[i] - 'a']++;
-    }
-    REP(i, 0, 26){
-        if(alpha[i] != alpha[i]){
-            cout << "NO" << endl;
-            return 0;
+    int mi = 1, ma = 100;
+    vector<vector<int> > lis(101, vector<int>(2, -1));
+    int x = 0, y = 0;
+    REP(i, 0, 50){
+        if(1500 - x - 2 * ma < 0){
+            x = 0;
+            y += 210;
         }
+        lis[ma][0] = x, lis[ma][1] = y;
+        lis[mi][0] = x, lis[mi][1] = y + 2 * ma;
+        x += 2 * ma;
+        ma--;
+        mi++;
     }
-    string ka = "", kb = "";
-    REP(i, 0, a.size()){
-        if(a[i] != b[i]){
-            ka = ka + a[i];
-            kb = kb + b[i];
-        }
-    }
-    int nn = ka.size();
-    int f = 0;
-    REP(i, 0, 26){
-        if(alpha[i] >= 2){
-            f = 1;
-        }
-    }
-    if(nn > 6){
-        cout << "NO" << endl;
-        return 0;
-    }
-    solve(ka, kb, 0, f);
-    if(ans == 1){
-        cout << "YES" << endl;
-    }else{
-        cout << "NO" << endl;
+    REP(i, 1, 101){
+        cout << lis[i][0] + i  << " " << lis[i][1] + i  << endl;
     }
 }
