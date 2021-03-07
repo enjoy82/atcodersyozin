@@ -36,5 +36,24 @@ int dy[4] = {0, 0, 1, -1};
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
 int main(){
-
+    int x, y, n; cin >> x >> y >> n;
+    vector<vector<ll> > dp(n+1, vector<ll>(700, -1));
+    dp[0][0] = 0;
+    REP(i, 0, n){
+        ll t, h; cin >> t >> h;
+        for(int i = n-1; i >= 0; i--){
+            REP(l, 0, 700){
+                if(dp[i][l] != -1 && l+t < 700){
+                    chmax(dp[i+1][l+t], dp[i][l] + h);
+                }
+            }
+        }
+    }
+    ll ans = 0;
+    REP(i, 0, min(x+1, n+1)){
+        REP(l, 0, x+y+1){
+            chmax(ans, dp[i][l]);
+        }
+    }
+    cout << ans << endl;
 }

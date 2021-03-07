@@ -35,6 +35,22 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
-int main(){
+void solve(){
+    int n; cin >> n;
+    string ans = "";
+    string a, b, c; cin >> a >> b >> c;
+    REP(i,0,n){
+        cout << "0";
+    }
+    REP(i,0,n){
+        cout << "1";
+    }
+    cout << 0 << endl;
+}
 
+int main(){
+    int t; cin >> t;
+    REP(i, 0, t){
+        solve();
+    }
 }

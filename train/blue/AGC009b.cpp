@@ -35,6 +35,32 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
-int main(){
 
+
+vector<vector<int> > lis(1e6);
+map<int, int> mp;
+
+int solve(int num){
+    vector<int> count;
+    REP(i,0,lis[num].size()){
+        int a = solve(lis[num][i]);
+        count.pb(a);
+    }
+    int ma = 0;
+    sort(ALL(count), greater<>());
+    REP(i,0,count.size()){
+        chmax(ma, count[i]+i);
+    }
+    //cout << num << "  " <<ma+1 << endl;
+    return ma+ 1;
+}
+
+int main(){
+    int n; cin >> n;
+    REP(i,0,n-1){
+        int a; cin >> a;
+        a--;
+        lis[a].pb(i+1);
+    }
+    cout << solve(0)-1 << endl;
 }

@@ -36,5 +36,35 @@ int dy[4] = {0, 0, 1, -1};
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
 int main(){
-
+    int n; cin >> n;
+    map<string, int> mp;
+    char last;
+    REP(i, 0, n){
+        string s; cin >> s;
+        if(!mp.count(s)){
+            mp[s] = 1;
+        }else{
+            if(i % 2 == 0){
+                cout << "LOSE" << endl;
+            }else{
+                cout << "WIN" << endl;
+            }
+            return 0;
+        }
+        if(i == 0){
+            last = s.back();
+        }else{
+            if(last == s[0]){
+                last = s.back();
+            }else{
+                if(i % 2 == 0){
+                    cout << "LOSE" << endl;
+                }else{
+                    cout << "WIN" << endl;
+                }
+                return 0;
+            }
+        }
+    }
+    cout << "DRAW" << endl;
 }
