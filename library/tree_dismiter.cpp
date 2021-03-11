@@ -44,7 +44,7 @@ struct Edge{
 using Graph = vector<vector<Pll>>;
 
 //木の直径
-Pll dfs(Graph &G, int u, int par) {  // 最遠点間距離と最遠点を求める
+Pll dfs(Graph &G, int u, int par) {  // 最遠点間距離と最遠点を求める first = distance, second = pos
     Pll ret = make_pair(0ll, u);
     for (auto e : G[u]) {
         if (e.first == par) continue;
@@ -105,3 +105,4 @@ int main(){
     int t; cin >> t;
     REP(i, 0, t){solve();}
 }
+
