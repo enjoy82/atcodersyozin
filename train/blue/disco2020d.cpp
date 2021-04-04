@@ -35,5 +35,23 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
+
 int main(){
+    int m; cin >> m;
+    ll num = 0;
+    ll ans = 0;
+    REP(i,0,m){
+        ll d, c; cin >> d >> c;
+        ll mid = d * c + num;
+        ll count = 0;
+        while(mid >= 10){
+            count += mid / 10;
+            ll up = mid / 10;
+            mid -= (mid / 10) * 10;
+            mid += up;
+        }
+        ans += c + count;
+        num = (d*c + num + count) % 10;
+    }
+    cout << ans - 1 << endl;
 }

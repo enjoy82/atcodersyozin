@@ -36,4 +36,27 @@ int dy[4] = {0, 0, 1, -1};
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
 int main(){
+    ll n, a, b, c, d; cin >> n >> a >> b >> c >> d;
+    ll mmin = -1 * d, mmax = -1 * c, pmin = c, pmax = d;
+    vector<ll> mmin_r(n+1, 0), mmax_r(n+1, 0), pmin_r(n+1, 0), pmax_r(n+1, 0);
+    REP(i,0,n){
+        mmin_r[i+1] = mmin_r[i] + mmin;
+        mmax_r[i+1] = mmax_r[i] + mmax;
+        pmin_r[i+1] = pmin_r[i] + pmin;
+        pmax_r[i+1] = pmax_r[i] + pmax;
+    }
+    ll dif = abs(a-b);
+    int f = 0;
+    REP(i,0,n){
+        ll left = mmin_r[n-1-i] + pmin_r[i];
+        ll right = mmax_r[n-1-i] + pmax_r[i];
+        if(left <= dif && dif <= right){
+            f = 1;
+        }
+    }
+    if(f){
+        cout << "YES" << endl;
+    }else{
+        cout << "NO" << endl;
+    }
 }

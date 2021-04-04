@@ -36,4 +36,33 @@ int dy[4] = {0, 0, 1, -1};
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
 int main(){
+    int n, m; cin >> n >> m;
+    vector<ll> modlis(m), maxsamenum(m, 0), flag(1e6, 0), odd(1e6, 0);
+    REP(i,0,n){
+        int a; cin >> a;
+        modlis[a%m]++;
+        flag[a]++;
+    }
+    REP(i,0,1e6){
+        odd[i%m] += flag[i] % 2;
+        maxsamenum[i%m] += flag[i] - (flag[i] % 2);
+    }
+    ll ans = modlis[0] / 2;
+    REP(i,1,m){
+        if(i == m-i){
+            ans += modlis[i] / 2;
+            modlis[i] -= (modlis[i] / 2) * 2;
+            continue;
+        }
+        ll mid1 = min(modlis[i], modlis[m-i]);
+        modlis[i] = 0;
+        modlis[m-i] = 0;
+        ll mid11 = mid1 + ((maxsamenum[i] - max(0ll, (mid1 - odd[i]))) / 2) + ((maxsamenum[m-i] - max(0ll, (mid1 - odd[m-i]))) / 2);
+        maxsamenum[i] = 0;
+        maxsamenum[m-i] = 0;
+        odd[i] = 0;
+        odd[m-i] = 0;
+        ans += mid11;
+    }
+    cout << ans << endl;
 }

@@ -35,5 +35,31 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
+const ll MOD = 998244353;
+
+ll Pow(ll  x, ll n){
+  if(n == 0)
+    return 1;
+  if(n % 2 == 0)
+    return Pow(x * x % MOD, n / 2);
+  else
+    return x * Pow(x, n - 1) % MOD;
+}
+
+
 int main(){
+    int n; cin >> n;
+    vector<ll> lis(n);
+    REP(i,0,n){cin >> lis[i];}
+    sort(ALL(lis), greater<>());
+    ll ans = 0;
+    ll mid = 0;
+    REP(i,0,n){
+        ans += lis[i] * (mid + lis[i]);
+        ans %= MOD;
+        mid %= MOD;
+        mid += (mid + lis[i]);
+        //cout << mid << endl;
+    }
+    cout << ans << endl;
 }

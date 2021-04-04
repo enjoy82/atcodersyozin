@@ -35,5 +35,18 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
+ll cul(ll sum, ll ma){
+    ll k = max(0ll, sum - ma - 1);
+    return max((sum - 1) - 2 * k, 0ll);
+}
+
 int main(){
+    int n, k; cin >> n >> k;
+    ll ans = 0;
+    REP(i, 2, n*2 + 1){
+        ll cd = cul(i-k, n);
+        ll ab = cul(i, n);
+        ans += ab * cd;
+    }
+    cout << ans << endl;
 }

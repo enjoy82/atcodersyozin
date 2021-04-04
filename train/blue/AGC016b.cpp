@@ -36,4 +36,42 @@ int dy[4] = {0, 0, 1, -1};
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
 int main(){
+    int n; cin >> n;
+    vector<ll> alis(n);
+    REP(i,0,n){cin >> alis[i];}
+    sort(ALL(alis));
+    if(alis.back() - alis[0] >= 2){
+        cout << "No" << endl;
+        return 0;
+    }
+    if(alis.back() == alis[0]){
+        if(alis[0] * 2 <= n || alis[0]+1 == n){
+            cout << "Yes" << endl;
+            return 0;
+        }else{
+            cout << "No" << endl;
+            return 0;
+        }
+    }else{
+        int mcount = 0, pcount = 0;
+        REP(i,0,n){
+            if(alis[i] == alis[0]){
+                mcount++;
+            }
+            if(alis[i] == alis.back()){
+                pcount++;
+            }
+        }
+        if(mcount == 2 && alis[0] * 2  == n){
+            cout << "Yes" << endl;
+            return 0;
+        }
+        if(mcount <= alis[0] && pcount <= n-alis.back()+1){
+            cout << "Yes" << endl;
+            return  0;
+        }else{
+            cout << "No" << endl;
+            return 0;
+        }
+    }
 }

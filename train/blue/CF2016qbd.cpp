@@ -36,4 +36,23 @@ int dy[4] = {0, 0, 1, -1};
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
 int main(){
+    int n; cin >> n;
+    vector<ll> lis(n);
+    REP(i,0,n){cin >> lis[i];}
+    ll ans = lis[0] - 1;
+    lis[0] = 1;
+    ll mid = lis[0];
+    REP(i,1,n){
+        ll k = (lis[i] - 1) / (mid + 1);
+        ans += k;
+        if(lis[i] >= mid + 2){
+            lis[i] = mid;
+        }else if(lis[i] == mid + 1){
+            lis[i] = mid + 1;
+        }else{
+            lis[i] = mid;
+        }
+        mid = lis[i];
+    }
+    cout << ans << endl;
 }
