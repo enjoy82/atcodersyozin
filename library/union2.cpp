@@ -5,7 +5,7 @@ using namespace std;
 
 class UnionFind{
     public:
-        vector<int> uni;
+        vector<int> uni; //直接根いじるとき注意！root変わる！
         UnionFind(int s) : uni(s, -1) { }
  
        //頂点aが所属するグループを調べる

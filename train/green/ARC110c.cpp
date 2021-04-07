@@ -9,6 +9,13 @@ using namespace std;
 using Pii = pair<int, int>;
 using Pll = pair<ll, ll>;
 
+//ordered_set 重複不可
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+template<typename T>
+using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+// use set_function + find_by_order(select itr-num)
+
 #define REP(i, l, n) for(int i=(l), i##_len=(n); i<i##_len; ++i)
 #define ALL(x) (x).begin(),(x).end()
 #define pb push_back
@@ -28,88 +35,75 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
-struct LazySegmentTree {
-private:
-    int n;
-    vector<ll> node, lazy;
+struct fenwick_tree {
+    typedef int T;
+    T n;
+    vector<T> bit;
 
-public:
-    LazySegmentTree(vector<ll> v) {
-        int sz = (int)v.size();
-        n = 1; while(n < sz) n *= 2;
-        node.resize(2*n-1);
-        lazy.resize(2*n-1, 0);
+    // 各要素の初期値は 0
+    fenwick_tree(T num) : bit(num+1, 0) { n = num; }
 
-        for(int i=0; i<sz; i++) node[i+n-1] = v[i];
-        for(int i=n-2; i>=0; i--) node[i] = node[i*2+1] + node[i*2+2];
-    }
-
-    void eval(int k, int l, int r) {
-        if(lazy[k] != 0) {
-            node[k] += lazy[k];
-            if(r - l > 1) {
-                lazy[2*k+1] += lazy[k] / 2;
-                lazy[2*k+2] += lazy[k] / 2;
-            }
-            lazy[k] = 0;
+    // a_i += w
+    void add(T i, T w) {
+        for (T x = i; x <= n; x += x & -x) {
+            bit[x] += w;
         }
     }
-
-    void add(int a, int b, ll x, int k=0, int l=0, int r=-1) {
-        if(r < 0) r = n;
-        eval(k, l, r);
-        if(b <= l || r <= a) return;
-        if(a <= l && r <= b) {
-            lazy[k] += (r - l) * x;
-            eval(k, l, r);
+    // [1, i] の和を計算.
+    T sum(T i) {
+        T ret = 0;
+        for (T x = i; x > 0; x -= x & -x) {
+            ret += bit[x];
         }
-        else {
-            add(a, b, x, 2*k+1, l, (l+r)/2);
-            add(a, b, x, 2*k+2, (l+r)/2, r);
-            node[k] = node[2*k+1] + node[2*k+2];
-        }
+        return ret;
     }
-
-    ll getsum(int a, int b, int k=0, int l=0, int r=-1) {
-        if(r < 0) r = n;
-        eval(k, l, r);
-        if(b <= l || r <= a) return 0;
-        if(a <= l && r <= b) return node[k];
-        ll vl = getsum(a, b, 2*k+1, l, (l+r)/2);
-        ll vr = getsum(a, b, 2*k+2, (l+r)/2, r);
-        return vl + vr;
+    // [left+1, right] の和を計算.
+    T sum(T left, T right) {
+        return sum(right) - sum(left);
     }
 };
-int main() {
+
+int main(){
     int n; cin >> n;
-    map<int, int> mp;
-    vector<int> anslis;
-    int ans = 0;
-    LazySegmentTree seg( vector<ll>(n, 0) );
-    REP(i, 0, n){
-        int a; cin >> a;
-        a--;
-        mp[a] = i;
+    vector<ll> lis(n);
+    REP(i,0,n){cin >> lis[i];}
+    reverse(ALL(lis));
+    fenwick_tree f_tree(n);
+    vector<int> anslis(n, 0);
+    REP(i,0,n){
+        anslis[i] += f_tree.sum(lis[i]);
+        f_tree.add(lis[i], 1);
     }
-    REP(i, 0, n) {
-        int k = mp[i];
-        int diff = (k - seg.getsum(k, k+1));
-        ans += diff;
-        REP(l, 0, diff){
-            anslis.pb(k - l);
+    reverse(ALL(anslis));
+    reverse(ALL(lis));
+    int count = 0;
+    vector<int> ans;
+    vector<int> flag(1e6, 0);
+    for(int i = n-1; i >= 0; i--){
+        REP(l,0,anslis[i]){
+            ans.pb(i+1+l);
+            flag[i+1+l]++;
+            if(flag[i+1+l] >= 2){
+                cout << -1 << endl;
+                return 0;
+            }
         }
-        if(anslis.size() >= n){
+        count += anslis[i];
+        if(count > n-1){
             cout << -1 << endl;
             return 0;
         }
-        seg.add(k, n, 1);
     }
-    if(anslis.size() == n-1){
-        REP(i, 0, anslis.size()){
-            cout << anslis[i] << endl;
-        }
-    }else{
+    if(n-1-count != 0){
         cout << -1 << endl;
+        return 0;
+    }else{
+        REP(i,0,ans.size()){
+            cout << ans[i] << endl;
+        }
+        REP(i,0,n-1-count){
+            cout << 1 << endl;
+        }
+        return 0;
     }
-    return 0;
 }
