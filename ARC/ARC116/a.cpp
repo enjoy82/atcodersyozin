@@ -35,5 +35,22 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
+void solve(){
+    ll a; cin >> a;
+    if(a == 1){
+        cout << "Odd" << endl;
+        return;
+    }
+    if(a % 2 == 0 && (a/2) % 2 == 1){
+        cout << "Same" << endl;
+    }else if(a % 2 == 1){
+        cout << "Odd" << endl;
+    }else{
+        cout << "Even" << endl;
+    }
+}
+
 int main(){
+    int t; cin >> t;
+    REP(i,0,t){solve();}
 }
