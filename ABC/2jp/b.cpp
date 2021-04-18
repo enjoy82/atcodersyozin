@@ -36,5 +36,28 @@ int dy[4] = {0, 0, 1, -1};
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
 int main(){
-
+    int n, m; cin >> n >> m;
+    map<int, int> alis, blis;
+    REP(i,0,n){
+        int a; cin >> a;
+        alis[a] = 1;
+    }
+    REP(i,0,m){
+        int b; cin >> b;
+        blis[b] = 1;
+    }
+    vector<int> anslis;
+    REP(i,0,1e5){
+        if(alis[i] == 1 && blis[i] == 0){
+            anslis.pb(i);
+        }
+        if(blis[i] == 1 && alis[i] == 0){
+            anslis.pb(i);
+        }
+    }
+    sort(ALL(anslis));
+    REP(i,0, anslis.size()){
+        cout << anslis[i] << " ";
+    }
+    cout << endl;
 }

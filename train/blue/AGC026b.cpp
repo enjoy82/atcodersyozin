@@ -35,6 +35,28 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
-int main(){
+void solve(){
+    ll a, b, c, d; cin >> a >> b >> c >> d;
+    if(b > a){
+        cout << "No" << endl;
+        return;
+    }else if(b > d){
+        cout << "No" << endl;
+        return;
+    }else if(c >= b){
+        cout << "Yes" << endl;
+        return;
+    }
+    ll g = gcd(b,d);
+    if((b - g + (a % g)) > c){
+        cout << "No" << endl;
+    }else{
+        cout << "Yes" << endl;
+    }
+    return;
+}
 
+int main(){
+    int t; cin >> t;
+    REP(i,0,t){solve();}
 }

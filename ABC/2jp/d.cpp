@@ -35,6 +35,22 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
-int main(){
+const ll MOD = 1e9+7;
 
+
+ll Pow(ll  x, ll n){
+  if(n == 0)
+    return 1;
+  if(n % 2 == 0)
+    return Pow(x * x % MOD, n / 2);
+  else
+    return x * Pow(x, n - 1) % MOD;
+}
+
+
+int main(){
+    ll n, p; cin >> n >> p;
+    ll k = p-1, cc = Pow(p-2, n-1);
+    cout << (k * cc) % MOD << endl;
+    return 0;
 }

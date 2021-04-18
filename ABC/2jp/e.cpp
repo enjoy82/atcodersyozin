@@ -36,5 +36,23 @@ int dy[4] = {0, 0, 1, -1};
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
 int main(){
-
+    int k; cin >> k;
+    string s; cin >> s;
+    int ans = 0;
+    REP(i,0,s.size() / 2){
+        if(s[i] != s[s.size() - i - 1]){
+            //cout << i << " " << s[i]  << "" << s[s.size() - i] << endl;
+            ans++;
+        }
+    }
+    ll cc = 1;
+    REP(i,0,k-1){
+        cc *= 2;
+        if(cc > 1e9){
+            break;
+        }
+    }
+    if(s.size() < cc){
+        cout << "impossible" << endl;
+    }
 }

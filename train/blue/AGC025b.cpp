@@ -35,6 +35,49 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
-int main(){
+const ll MOD = 998244353;
 
+
+const ll MAX = 1000000; //テーブルの数
+
+long long fac[MAX], finv[MAX], inv[MAX];
+// finv ->階乗割り算
+// fac ->階乗掛け算
+
+// テーブルを作る前処理
+void COMinit() {
+    fac[0] = fac[1] = 1;
+    finv[0] = finv[1] = 1;
+    inv[1] = 1;
+    for (int i = 2; i < MAX; i++){
+        fac[i] = fac[i - 1] * i % MOD;
+        inv[i] = MOD - inv[MOD%i] * (MOD / i) % MOD;
+        finv[i] = finv[i - 1] * inv[i] % MOD;
+    }
+}
+
+// 二項係数計算
+long long COM(int n, int k){
+    if (n < k) return 0;
+    if (n < 0 || k < 0) return 0;
+    return (fac[n] * (finv[k] * finv[n - k] % MOD)) % MOD;
+}
+
+
+int main(){
+    ll n, a, b, k; cin >> n >> a >> b >> k;
+    COMinit();
+    vector<Pll> plis;
+    ll ans = 0;
+    REP(i,0,n+1){
+        ll mid = k - i * a;
+        if(mid < 0){
+            continue;
+        }
+        if(mid % b == 0 && mid / b <= n){
+           ans += (COM(n, i) * COM(n, mid/b))% MOD ;
+           ans %= MOD;
+        }
+    }
+    cout << ans << endl;
 }

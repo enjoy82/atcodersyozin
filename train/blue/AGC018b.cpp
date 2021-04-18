@@ -36,5 +36,36 @@ int dy[4] = {0, 0, 1, -1};
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
 int main(){
-
+    int n, m; cin >> n >> m;
+    vector<vector<int> > lis(n, vector<int>(m));
+    REP(i,0,n){
+        REP(l,0,m){
+            cin >> lis[i][l];
+        }
+    }
+    vector<int> idxs(n, 0);
+    vector<int> flag(m, 0);
+    int ans = 1e9;
+    if(m == 1){
+        cout << n << endl;
+        return 0;
+    }
+    REP(i,0,m-1){
+        vector<int> count(m, 0);
+        int key = 0, idx;
+        REP(l,0,n){
+            count[lis[l][idxs[l]]-1]++;
+            if(chmax(key, count[lis[l][idxs[l]]-1])){
+                idx = lis[l][idxs[l]];
+            }
+        }
+        chmin(ans,key);
+        flag[idx-1] = 1;
+        REP(l,0,n){
+            while(flag[lis[l][idxs[l]]-1] == 1){
+                idxs[l]++;
+            }
+        }
+    }
+    cout << ans << endl;
 }

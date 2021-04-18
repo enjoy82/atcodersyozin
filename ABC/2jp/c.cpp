@@ -36,5 +36,20 @@ int dy[4] = {0, 0, 1, -1};
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
 int main(){
-
+    int a, b; cin >> a >> b;
+    int ans = 0;
+    REP(i,1,b+1){
+        int gc = i;
+        int left = ((a + gc-1) / gc) * gc;
+        int right = (b / gc) * gc;
+        //cout << i << endl;
+        //cout << left << " " << right << endl;
+        if(left == right){
+            continue;
+        }
+        if(right > left && right <= b && left >= a){
+            chmax(ans, gc);
+        }
+    }
+    cout << ans << endl;
 }

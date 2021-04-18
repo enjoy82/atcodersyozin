@@ -36,5 +36,23 @@ int dy[4] = {0, 0, 1, -1};
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
 int main(){
-
+    string s; cin >> s;
+    int  f = 0;
+    REP(i,0,11){
+        int ff = 1;
+        REP(l,0,s.size() / 2){
+            if(s[l] != s[s.size() - 1 - l]){
+                ff = 0;
+            }
+        }
+        if(ff == 1){
+            f = 1;
+        }
+        s = "0" + s;
+    }
+    if(f == 1){
+        cout << "Yes" << endl;
+    }else{
+        cout << "No" << endl;
+    }
 }

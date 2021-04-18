@@ -35,6 +35,50 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
-int main(){
+int n;
+vector<int> color;
+vector<int> anslis;
+vector<int> flag;
 
+void solve(int pos, unordered_map<int, int> &mp, vector<vector<int> > &tree){
+    if(mp.count(color[pos])){
+        if(mp[color[pos]] == 0){
+            anslis[pos] = 1;
+        }
+    }else{
+        anslis[pos] = 1;    
+    }
+    mp[color[pos]]++;
+    REP(i,0,tree[pos].size()){
+        int next = tree[pos][i];
+        if(flag[next] == 0){
+            flag[next] = 1;
+            solve(next, mp, tree);
+        }
+    }
+    mp[color[pos]]--;
+}
+
+int main(){
+    int n; cin >> n;
+    color = vector<int>(n);
+    anslis = vector<int>(n, 0);
+    flag = vector<int>(n, 0);
+    REP(i,0,n){cin >> color[i];}
+    vector<vector<int> > tree(n);
+    REP(i,0,n-1){
+        int a, b; cin >> a >> b;
+        a--; b--;
+        tree[a].pb(b);
+        tree[b].pb(a);
+    }
+    unordered_map<int, int> mp;
+    flag[0] = 1;
+    solve(0, mp, tree);
+    REP(i,0,n){
+        if(anslis[i] == 1){
+            cout << i + 1 << endl;
+        }
+    }
+    return 0;
 }

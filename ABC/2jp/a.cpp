@@ -36,5 +36,12 @@ int dy[4] = {0, 0, 1, -1};
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
 int main(){
-
+    ll x, y, z; cin >> x >> y >> z;
+    for(ll i = 3e7; i >= 0; i--){
+        //cout << y * z << " " <<  i * x << endl;
+        if(i * x < y * z){
+            cout << i << endl;
+            return 0;
+        }
+    }
 }

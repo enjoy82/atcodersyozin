@@ -36,5 +36,19 @@ int dy[4] = {0, 0, 1, -1};
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
 int main(){
-
+    ll r, x, y; cin >> r >> x >> y;
+    ll dis = x * x + y * y;
+    ll cp = r, ans = 1;
+    if(r * r > dis){
+        cout << 2 << endl;
+        return 0;
+    }
+    while(1){
+        if(r * r >= dis){
+            cout << ans << endl;
+            return 0;
+        }
+        ans ++;
+        r += cp;
+    }
 }
