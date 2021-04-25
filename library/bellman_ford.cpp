@@ -83,7 +83,7 @@ ll bellman_ford(const Graph& G, const Graph& rev, const int start, const int goa
   cost[start] = 0;
  
   // 閉路がなければn回のループで良いが、閉路検出用にn+1回回す
-  for (int i = 0; i < 1e5; i++) {
+  for (int i = 0; i < 1e4; i++) {
     // すべての辺を走査
     for (int from = 0; from < n; from++) {
       if (cost[from] == INF) {
