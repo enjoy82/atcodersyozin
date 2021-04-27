@@ -35,38 +35,29 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
-int main(){
-    int n, l, k; cin >> n >> l >> k;
-    vector<int> lis(n), lis2(n+1);
-    REP(i,0,n){cin >> lis[i];}
-    lis2[0] = lis[0];
-    REP(i,1,n){
-        lis2[i] = lis[i] - lis[i-1];
-    }
-    lis2[n] = l - lis.back();
+int n, l, k;
 
-    int left = 0, right = 1e9;
-    while(right - left > 0){
-        int mid = (right + left) / 2;
-        if(mid == right || mid == left){
-            continue;
-        }
-        int count = 1, sum = 0;
-        int f = 1;
-        REP(i,0,n+1){
-            if(lis2[i] > mid){
-                f = 0;
-                break;
-            }
-            if(sum + lis2[i] > mid){
-                count++;
-                sum = lis2[i];
-            }
-        }
-        if(count < k+1){
-            left = mid;
-        }else{
-            right = mid;
+bool solve(int mid, vector<int> &lis){
+    int count = 0, pre = 0;
+    REP(i,0,n){
+        if(lis[i] - pre >= mid && l - lis[i] >= mid){ //いくら綺麗にカットできても最後考えなきゃだめ
+            count++;
+            pre = lis[i];
         }
     }
+    if(count >= k) return true;
+    return false;
+}
+
+int main(){
+    cin >> n >> l >> k;
+    vector<int> lis(n);
+    REP(i,0,n){cin >> lis[i];}
+    int left = -1, right = l + 1;
+    while(right - left > 1){
+        int mid = left + (right - left) / 2;
+        if(solve(mid, lis) == false) right = mid;
+        else left = mid;
+    }
+    cout << left << endl;
 }
