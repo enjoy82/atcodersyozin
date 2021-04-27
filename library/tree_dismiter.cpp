@@ -36,11 +36,6 @@ char alpha[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm
 int dx[4] = {-1, 1, 0, 0};
 int dy[4] = {0, 0, 1, -1};
 
-template <typename T>
-struct Edge{
-    int to;
-    T cost;
-};
 using Graph = vector<vector<Pll>>;
 
 //木の直径
