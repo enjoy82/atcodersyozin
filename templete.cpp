@@ -36,4 +36,5 @@ int dy[4] = {0, 0, 1, -1};
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
 int main(){
+
 }
