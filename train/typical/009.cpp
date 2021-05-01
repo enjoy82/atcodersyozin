@@ -35,17 +35,50 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
-int main(){
-    ll n; cin >> n;
-    ll a, b, c; cin >> a >> b >> c;
-    ll ans = 1e9;
-    REP(i,0,1e4){
-        REP(l,0,1e4){
-            ll k = a*i + b*l;
-            if(n - k >= 0 && (n - k) % c == 0){
-                chmin(ans, i + l + (n - k) / c);
-            }
+const ld pi = 3.14159265359;
+
+ld angle(ld theta1, ld theta2){
+    return min(abs(theta1 - theta2), 360 - abs(theta1 - theta2));
+}
+
+ld solve(pair<ld, ld> &p, vector<pair<ld, ld> > &lis){
+    vector<ld> degree;
+    REP(i,0,lis.size()){
+        if(p == lis[i]){
+            continue;
+        }
+        ld theta = (atan2(lis[i].second - p.second, lis[i].first - p.first) * 180.0) / pi;
+        theta += 180;
+        degree.pb(theta);
+    }
+    ld mid = -1;
+    sort(ALL(degree));
+    REP(i,0,degree.size()){
+        ld theta = degree[i]; 
+        ld target = theta + 180.0;
+        if(target > 360) target -= 360;
+        auto it = lower_bound(ALL(degree), target);
+        if(it == degree.begin()){
+            chmax(mid, angle(theta, *it));
+        }else if(it == degree.end()){
+            chmax(mid, angle(theta, *(it - 1)));
+        }else{
+            chmax(mid, max(angle(theta, *it), angle(theta, *(it - 1))));
         }
     }
-    cout << ans << endl;
+    return mid;
+}
+
+int main(){
+    int n; cin >> n;
+    ld ans = -1.0;
+    vector<pair<ld, ld> > lis(n);
+    REP(i,0,n){
+        ld a, b; cin >> a >> b;
+        lis[i] = pair<ld, ld>(a, b);
+    }
+    REP(i,0,n){
+        chmax(ans, solve(lis[i], lis));
+    }
+    cout << std::fixed << std::setprecision(15) << ans << endl;
 }

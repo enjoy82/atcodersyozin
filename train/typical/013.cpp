@@ -35,17 +35,57 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
-int main(){
-    ll n; cin >> n;
-    ll a, b, c; cin >> a >> b >> c;
-    ll ans = 1e9;
-    REP(i,0,1e4){
-        REP(l,0,1e4){
-            ll k = a*i + b*l;
-            if(n - k >= 0 && (n - k) % c == 0){
-                chmin(ans, i + l + (n - k) / c);
+struct edge{ll to, cost;};
+
+class Dijkstra{
+    public:
+        vector<vector<edge>> G;
+        vector<ll> d;
+
+        Dijkstra(int n){
+            G = vector<vector<edge> >(n);
+            d = vector<ll>(n, 1e18);
+        }
+
+        void add_edge(ll from, ll to, ll cost){
+            edge e = {to, cost};
+            G[from].pb(e);
+        }
+
+        void dijkstra(ll s){
+            priority_queue<Pll, vector<Pll>, greater<Pll> > que;
+            d[s] = 0;
+            que.push(Pll(0, s));
+
+            while(!que.empty()){
+                Pll p = que.top(); que.pop();
+                ll v = p.second;
+                if(d[v] < p.first) continue;
+                for(int i = 0; i < G[v].size(); i++){
+                    edge e = G[v][i];
+                    if(d[e.to] > d[v] + e.cost){
+                        d[e.to] = d[v] + e.cost;
+                        que.push(Pll(d[e.to], e.to));
+                    }
+                }
             }
         }
+};
+
+int main(){
+    int n, m; cin >> n >> m;
+    Dijkstra dijk1(n), dijk2(n);
+    REP(i,0,m){
+        ll a, b, c; cin >> a >> b >> c;
+        dijk1.add_edge(a-1, b-1, c);
+        dijk1.add_edge(b-1, a-1, c);
+        dijk2.add_edge(a-1, b-1, c);
+        dijk2.add_edge(b-1, a-1, c);
     }
-    cout << ans << endl;
+    dijk1.dijkstra(0);
+    dijk2.dijkstra(n-1);
+    REP(i,0,n){
+        cout << dijk1.d[i] + dijk2.d[i] << endl;
+    }
+    return 0;
 }
