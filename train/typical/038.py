@@ -5,8 +5,11 @@ def gcd(aa, bb):
         return gcd(bb, aa%bb)
 
 def lcm(aa, bb):
-    return aa / gcd(aa, bb) * bb
+    return aa // gcd(aa, bb) * bb
 
 a, b = map(int, input().split())
 
-print(lcm(a, b))
+if lcm(a, b) > 1e18:
+    print("Large")
+else:
+    print(lcm(a, b))
