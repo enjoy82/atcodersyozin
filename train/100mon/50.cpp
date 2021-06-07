@@ -35,11 +35,11 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
-int n, m;
-vector<vector<pair<ll, Pll>> > lis;
 
 int main(){
+    int n, m;
     cin >> n >> m;
+    vector<vector<pair<ll, Pll>> > lis(n);
     REP(i,0,m){
         ll s, t, d, ti; cin >> s >> t >> d >> ti;
         s--; t--;
@@ -48,28 +48,53 @@ int main(){
         lis[s].pb(e);
         lis[t].pb(e1);
     }
-    queue<Pll> que;
-    que.push(0ll, -1);
-    vector<Pll> bitdp((1<<n), vector<ll>(n, 1e18));
-    while(!que.empty()){
-        Pll now = que.front();
-        ll pos = now.second;
-        ll s = now.first;
-        que.pop();
-        ll ti = 0;
-        if(now.second != -1){
-            ti = bitdp[s][pos];
-            if(ti == 1e18) continue;
-        }
-        REP(i,0,n){
-            if((s & (1<<i)) == 0){
-                if(lis[pos][i].second.second > ti){
-                    if(bitdp[s + (1<<i)][i] == 1e18) que.push(Pll(s + (1<<i), i);
-                    chmin(bitdp[s + (1<<i)][i], ti + lis[pos][i].second.first);
+    vector<vector<ll>> bitdp((1ll<<n), vector<ll>(n, 1e18));
+    vector<vector<ll>> count((1ll<<n), vector<ll>(n, 0));
+    bitdp[1][0] = 0ll;
+    count[1][0] = 1;
+    ll key = (1ll<<n)-1;
+    REP(i,1,(1<<n)){
+        REP(l,0,n){
+            ll ti = bitdp[i][l];
+            if(ti != 1e18){
+                REP(k,0,lis[l].size()){
+                    ll next = lis[l][k].first;
+                    ll sum = ti + lis[l][k].second.first;
+                    if((i & (1<<next)) == 0 && (lis[l][k].second.second >= sum)){
+                        if(bitdp[i | (1<<next)][next] > sum){
+                            bitdp[i | (1<<next)][next] = sum;
+                            count[i | (1<<next)][next] = count[i][l];
+                        }else if(bitdp[i | (1<<next)][next] == sum){
+                            count[i | (1<<next)][next] += count[i][l];
+                        }
+                    }
                 }
             }
         }
     }
     ll ans = 1e18;
-    ll count = 0;
+    ll count2 = 0;
+    
+    REP(from,0,n){
+        REP(i,0,lis[from].size()){
+            ll next = lis[from][i].first;
+            ll ti = bitdp[key][from];
+            ll sum = ti + lis[from][i].second.first;
+            if(next == 0 && lis[from][next].second.second >= sum){
+                if(ans > sum){
+                    ans = sum;
+                    count2 = count[key][from];
+                }else if(ans == sum){
+                    count2 += count[key][from];
+                }else{
+                    continue;
+                }
+            }
+        }
+    }
+    if(ans >= 1e18){
+        cout << "IMPOSSIBLE" << endl;
+        return 0; 
+    }
+    cout << ans << " " << count2 << endl;
 }
