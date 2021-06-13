@@ -22,6 +22,5 @@ int main() {
     cin >> n;
     lis.resize(n);
     for(int i=0; i<n; ++i) cin >> lis[i];
-    reverse(ALL(lis));
     solve();
 }
