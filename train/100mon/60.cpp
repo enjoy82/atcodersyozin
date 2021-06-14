@@ -35,45 +35,43 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
-#define MAX_V 500000
-#define INF 100000000
+#define MAX_V 1000
 
-//クラスカル使え！！！
+int d[MAX_V][MAX_V];
+int V; //頂点数
 
-vector<Pll> G[MAX_V]; // (cst, to)
-bool used[MAX_V]; 
-vector<ll> sp;
-
-ll prim() {
-    priority_queue<Pll, vector<Pll>, greater<Pll> > que;
-    memset(used, 0ll, sizeof(used));
-    que.push(Pll(0,0));
-    ll ret = 0;
-    while(!que.empty()) {
-        ll cst = que.top().first, v = que.top().second;
-        que.pop();
-        if(used[v]) continue;
-        used[v] = 1;
-        ret += cst;
-        sp.pb(cst);
-        for(int i = 0; i < G[v].size(); i++)
-            que.push(Pll(G[v][i].first, G[v][i].second));
+void warshall_floyd(){
+    for(int k = 0; k < V; k++){
+        for(int i = 0; i < V; i++){
+            for(int l = 0; l < V; l++){
+                d[i][l] = min(d[i][l], d[i][k] + d[k][l]);
+            }
+        }
     }
-    return ret;
 }
 
 int main(){
-    int n, m, k; cin >> n >> m >> k;
-    REP(i,0,m){
-        ll a, b, c; cin >> a >> b >> c;
-        G[a].pb(Pll(c,b));
-        G[b].pb(Pll(c,a));
+    int n, m; cin >> n >> m;
+    V = n;
+    REP(i,0,V)REP(l,0,V){
+        if(i == l) continue;
+        d[i][l] = 1e9;
     }
-    G[0].pb(Pll(0,1));
-    ll ans = prim();
-    sort(ALL(sp), greater<>());
-    REP(i,0,k-1){
-        ans -= sp[i];
+    REP(i,0,m){
+        int a, b, t; cin >> a >> b >> t;
+        a--; b--;
+        d[a][b] = t;
+        d[b][a] = t;
+    }
+    warshall_floyd();
+    int ans = 1e9;
+    REP(i,0,V){
+        int mid = 0;
+        REP(l,0,V){
+            chmax(mid, d[i][l]);
+        }
+        //cout << i << " " << mid << endl;
+        chmin(ans, mid);
     }
     cout << ans << endl;
 }
