@@ -39,7 +39,7 @@ int dy[4] = {0, 0, 1, -1};
 
 //木の深さ調べる
 ////////////////////////
-void Searchdepth(vector<int> &depth, int now, int cost, vector<vector<int> > &tree){
+void Searchdepth(vector<int> &depth, int now, int cost, vector<vector<int>> &tree){
     depth[now] = cost;
     REP(i, 0, tree[now].size()){
         int next = tree[now][i];
@@ -51,7 +51,7 @@ void Searchdepth(vector<int> &depth, int now, int cost, vector<vector<int> > &tr
     }
 }
 
-vector<int> searchdepth(int pos, int num, vector<vector<int> > &tree){ //第1引数として頂点与える、第2引数で頂点の数
+vector<int> searchdepth(int pos, int num, vector<vector<int>> &tree){ //第1引数として頂点与える、第2引数で頂点の数
     vector<int> depth(num, -1);
     Searchdepth(depth, pos, 0, tree);
     return depth;
@@ -59,45 +59,25 @@ vector<int> searchdepth(int pos, int num, vector<vector<int> > &tree){ //第1引
 ///////////////////////
 
 
-//木の子孫の数数える
-////////////////////////////
-int Searchleaf(vector<int> &leaf, vector<int> &used,int now, vector<vector<int> > &tree){
-    int count = 0;
-    used[now] = 1;
-    REP(i, 0, tree[now].size()){
-        int next = tree[now][i];
-        if(used[next] == -1){
-            count += Searchleaf(leaf, used, next, tree);
-        }else{
-            continue;
-        }
-    }
-    leaf[now] = count;
-    return count+1;
-}
-
-vector<int> searchleaf(int pos, int num, vector<vector<int> > &tree){ //第1引数として頂点与える、第2引数で頂点の数
-    vector<int> leaf(num, -1);
-    vector<int> used(num, -1);
-    Searchleaf(leaf, used, pos, tree);
-    return leaf;
-}
-///////////////////////////
-
-/////hoe to use
+/////how to use
 int main(){
-    int n;
-    vector<vector<int> > tree(n); //双方向木(n);
+    int n, k; cin >> n >> k;
+    vector<vector<int> > tree(n);
+    tree = vector<vector<int>>(n);
     REP(i, 0, n-1){
         int a, b; cin >> a >> b;
         a--; b--;
         tree[a].pb(b);
         tree[b].pb(a);
     }
-    vector<int> depth = searchdepth(0, n, tree);
-    REP(i, 0, n){cout << depth[i];}
-    cout << endl;
-    vector<int> leaf = searchleaf(0, n, tree);
-    REP(i, 0, n){cout << leaf[i];}
-    cout << endl;
+    vector<int> depth =  searchdepth(0, n, tree);
+    REP(i,0,k){
+        int a, b; cin >> a >> b;
+        a--; b--;
+        if(abs(depth[a]-depth[b]) % 2 == 1){
+            cout << "Road" << endl;
+        }else{
+            cout << "Town" << endl;
+        }
+    }
 }

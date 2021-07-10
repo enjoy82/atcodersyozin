@@ -86,7 +86,7 @@ vector<int> searchleaf(int pos, int num, vector<vector<int> > &tree){ //第1引�
 
 /////hoe to use
 int main(){
-    int n;
+    int n; cin >> n;
     vector<vector<int> > tree(n); //双方向木(n);
     REP(i, 0, n-1){
         int a, b; cin >> a >> b;
@@ -94,10 +94,20 @@ int main(){
         tree[a].pb(b);
         tree[b].pb(a);
     }
-    vector<int> depth = searchdepth(0, n, tree);
-    REP(i, 0, n){cout << depth[i];}
-    cout << endl;
     vector<int> leaf = searchleaf(0, n, tree);
-    REP(i, 0, n){cout << leaf[i];}
-    cout << endl;
+    map<Pii, int> mp;
+    ll ans = 0;
+    REP(i,0,n){
+        REP(l,0,tree[i].size()){
+            if(mp.count(Pii(i, tree[i][l]))){
+                continue;
+            }
+            mp[Pii(tree[i][l],i)] = 1;
+            mp[Pii(i,tree[i][l])] = 1;
+            ll lf = min(leaf[i], leaf[tree[i][l]]) + 1;
+            //cout << lf << " " << n-lf << endl;
+            ans += lf * (n-lf);
+        }
+    }
+    cout << ans << endl;
 }
