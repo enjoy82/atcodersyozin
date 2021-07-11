@@ -1,26 +1,29 @@
-#include<bits/stdc++.h>
-typedef long long ll;
+#include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
+const long long INF = 1LL<<60;
 
-#define REP(i, l, n) for(int i=(l), i##_len=(n); i<i##_len; ++i)
+// 最長増加部分列の長さを求める
+int LIS(const vector<long long> &a) {
+    int N = (int)a.size();
+    vector<long long> dp(N, INF);
+    for (int i = 0; i < N; ++i) {
+        // dp[k] >= a[i] となる最小のイテレータを見つける
+        auto it = lower_bound(dp.begin(), dp.end(), a[i]);
 
-#define MAX_N 100000
-#define INF 1e+13
-ll dp[MAX_N];
-ll n;
-vector<ll> lis; //LIS求めるやつ
-
-void solve() {
-    fill(dp, dp+n, INF);
-    for (int i=0; i<n; ++i) {
-        *upper_bound(dp, dp+n, lis[i]) = lis[i];
+        // そこを a[i] で書き換える
+        *it = a[i];
     }
-    cout << lower_bound(dp, dp+n, INF) - dp << endl;
+
+    // dp[k] < INF となる最大の k に対して k+1 が答え
+    // それは dp[k] >= INF となる最小の k に一致する
+    return lower_bound(dp.begin(), dp.end(), INF) - dp.begin();
 }
 
 int main() {
-    cin >> n;
-    lis.resize(n);
-    for(int i=0; i<n; ++i) cin >> lis[i];
-    solve();
-}
+    int N; cin >> N;
+    vector<long long> a(N);
+    for (int i = 0; i < N; ++i) cin >> a[i];
+    cout << LIS(a) << endl;
+}   
