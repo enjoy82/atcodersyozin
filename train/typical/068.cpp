@@ -85,7 +85,7 @@ int main(){
     int n, q; cin >> n >> q;
     UnionFind un(n+1);
     vector<vector<ll> > query(q, vector<ll>(4));
-    vector<vector<ll> > node(n, vector<ll>(3, 0));
+    vector<vector<ll> > node(n, vector<ll>(3, -1));
     REP(i,0,q){
         REP(l,0,4){
             cin >> query[i][l];
@@ -94,14 +94,35 @@ int main(){
             node[query[i][1]-1][0] = query[i][3];
         }
     }
-    REP(i,0,n){
-        while(node[i][0] != 0){
-            if(node[i][1] == 0){
-                node[i+1][1] = 1;
-            }else if(node[i][1] == 1){
-                node[i+1][1] = -1;
+    REP(i,0,2){
+        REP(l,0,n){
+            int f = 1;
+            while(node[l][0] != -1){
+                if(f){
+                    node[l][i+1] = i;
+                    f = 0;
+                }
+                if(l+1 < n)
+                    node[l+1][i+1] = node[l][0] - node[l][i+1];
+                l++;
+            }
+        }
+    }
+    REP(i,0,q){
+        if(query[i][0] == 0){
+            un.connect(query[i][1]-1, query[i][2]-1);
+        }else{
+            if(un.isConnect(query[i][1]-1, query[i][2]-1)){
+                ll dif1 = node[query[i][1]-1][2] - node[query[i][1]-1][1];
+                ll dif2 = node[query[i][2]-1][2] - node[query[i][2]-1][1];
+                ll dif = query[i][3] - node[query[i][1]-1][1];
+                if( (dif1/abs(dif1)) * (dif2/abs(dif2)) > 0){
+                    cout << node[query[i][2]-1][1] + dif << endl;;
+                }else{
+                    cout << node[query[i][2]-1][1] - dif << endl;;
+                }
             }else{
-                node[i+1][1] = 1;
+                cout << "Ambiguous" << endl;
             }
         }
     }
