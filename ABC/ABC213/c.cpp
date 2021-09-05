@@ -35,34 +35,27 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
-const ll mod = 998244353;
-
 int main(){
-    int n, m, k; cin >> n >> m >> k;
-    vector<Pll> edge;
-    REP(i, 0, m){
-        int a, b; cin >> a >> b;
-        a--; b--;
-        edge.pb(Pll(a, b));
+    ll h, w, n; cin >> h >> w >> n;
+    vector<Pll> lis;
+    vector<ll> alis, blis;
+    REP(i,0,n){
+        ll a, b; cin >> a >> b;
+        lis.pb(Pll(a, b));
+        alis.pb(a);
+        blis.pb(b);
     }
-    vector<vector<ll> > dp(k+1, vector<ll>(n, 0));
-    dp[0][0] = 1;
-    REP(i,0,k){
-        ll sum = 0;
-        REP(l,0,n)
-            sum += dp[i][l];
-        REP(l,0,n){
-            dp[i+1][l] += sum - dp[i][l];
-            dp[i+1][l] %= mod;
-        }
-        REP(l,0,m){
-            Pll e = edge[l];
-            int a = e.first, b = e.second;
-            dp[i+1][a] -= dp[i][b];
-            dp[i+1][b] -= dp[i][a];
-            dp[i+1][a] = (dp[i+1][a] + mod) % mod;
-            dp[i+1][b] = (dp[i+1][b] + mod) % mod;
-        }
+    sort(ALL(alis));
+    sort(ALL(blis));
+    alis.erase(unique(ALL(alis)), alis.end());
+    blis.erase(unique(ALL(blis)), blis.end());
+    REP(i,0,n){
+        Pll e = lis[i];
+        int a = e.first, b = e.second;
+        auto ita = lower_bound(ALL(alis), a);
+        int x = ita - alis.begin();
+        auto itb = lower_bound(ALL(blis), b);
+        int y = itb - blis.begin();
+        cout << x + 1 << " " << y + 1 << endl;
     }
-    cout << dp[k][0] << endl;
-}
+} 

@@ -35,34 +35,15 @@ int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
-const ll mod = 998244353;
-
 int main(){
-    int n, m, k; cin >> n >> m >> k;
-    vector<Pll> edge;
-    REP(i, 0, m){
-        int a, b; cin >> a >> b;
-        a--; b--;
-        edge.pb(Pll(a, b));
+    int n; cin >> n;
+    vector<ll> lis(n), idx(n);
+    REP(i,0,n){
+         cin >> lis[i];
     }
-    vector<vector<ll> > dp(k+1, vector<ll>(n, 0));
-    dp[0][0] = 1;
-    REP(i,0,k){
-        ll sum = 0;
-        REP(l,0,n)
-            sum += dp[i][l];
-        REP(l,0,n){
-            dp[i+1][l] += sum - dp[i][l];
-            dp[i+1][l] %= mod;
-        }
-        REP(l,0,m){
-            Pll e = edge[l];
-            int a = e.first, b = e.second;
-            dp[i+1][a] -= dp[i][b];
-            dp[i+1][b] -= dp[i][a];
-            dp[i+1][a] = (dp[i+1][a] + mod) % mod;
-            dp[i+1][b] = (dp[i+1][b] + mod) % mod;
-        }
-    }
-    cout << dp[k][0] << endl;
+    iota(ALL(idx), 0);
+    sort(ALL(idx), [&](auto &l, auto &r){
+        return lis[l] > lis[r];
+    });
+    cout << idx[1] + 1 << endl;
 }
