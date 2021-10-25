@@ -26,6 +26,14 @@ ll lcm(ll a,ll b){return a/gcd(a,b)*b;}
 template<class T>inline bool chmax(T &a, T b) {if(a < b) {a = b;return true;}return false;}
 template<class T>inline bool chmin(T &a, T b) {if(a > b) {a = b;return true;}return false;}
 
+template <class T>
+inline vector<T> make_vec(size_t a, T val) {
+    return vector<T>(a, val);
+}
+template <class... Ts>
+inline auto make_vec(size_t a, Ts... ts) {
+    return vector<decltype(make_vec(ts...))>(a, make_vec(ts...));
+}
 
 char alpha[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 char Alpha[26] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
