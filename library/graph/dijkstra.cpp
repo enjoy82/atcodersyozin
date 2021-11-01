@@ -26,6 +26,14 @@ ll lcm(ll a,ll b){return a/gcd(a,b)*b;}
 template<class T>inline bool chmax(T &a, T b) {if(a < b) {a = b;return true;}return false;}
 template<class T>inline bool chmin(T &a, T b) {if(a > b) {a = b;return true;}return false;}
 
+template <class T>
+inline vector<T> make_vec(size_t a, T val) {
+    return vector<T>(a, val);
+}
+template <class... Ts>
+inline auto make_vec(size_t a, Ts... ts) {
+    return vector<decltype(make_vec(ts...))>(a, make_vec(ts...));
+}
 
 char alpha[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 char Alpha[26] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
@@ -34,22 +42,26 @@ int dx[4] = {-1, 1, 0, 0};
 int dy[4] = {0, 0, 1, -1};
 
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
+struct Edge {
+    long long to;
+    long long cost;
+};
+using Graph = vector<vector<Edge>>;
 
-///////////////////////////////////////////////////////////////
-struct edge{ll to, cost;};
+const long long LINF = 1LL << 60;
 
 class Dijkstra{
     public:
-        vector<vector<edge>> G;
+        Graph G;
         vector<ll> d;
 
         Dijkstra(int n){
-            G = vector<vector<edge> >(n);
+            G = Graph(n);
             d = vector<ll>(n, 1e18);
         }
 
         void add_edge(ll from, ll to, ll cost){
-            edge e = {to, cost};
+            Edge e = {to, cost};
             G[from].pb(e);
         }
 
@@ -63,7 +75,7 @@ class Dijkstra{
                 ll v = p.second;
                 if(d[v] < p.first) continue;
                 for(int i = 0; i < G[v].size(); i++){
-                    edge e = G[v][i];
+                    Edge e = G[v][i];
                     if(d[e.to] > d[v] + e.cost){
                         d[e.to] = d[v] + e.cost;
                         que.push(Pll(d[e.to], e.to));

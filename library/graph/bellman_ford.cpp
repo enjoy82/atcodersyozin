@@ -49,3 +49,52 @@ struct Edge {
 using Graph = vector<vector<Edge>>;
 
 const long long LINF = 1LL << 60;
+
+
+/* bellman_ford(Es,s,t,dis)
+    入力: 全ての辺Es, 頂点数V, 開始点 s, 最短経路を記録するdis
+    出力: 負の閉路が存在するなら ture
+    計算量：O(|E||V|)
+    副作用：dis が書き換えられる
+*/
+bool bellman_ford(const Graph &G, int V, int s, vector<ll> &dis) {
+    dis.resize(V, INF);
+    dis[s] = 0;
+    int cnt = 0;
+    while (cnt < V) {
+        bool end = true;
+        for(int from = 0; from < V; from++){
+            for (auto e : G[from]) {
+                if (dis[from] != INF && dis[from] + e.cost < dis[e.to]) {
+                    dis[e.to] = dis[from] + e.cost;
+                    end = false;
+                }
+            }
+        }
+        if (end) break;
+        cnt++;
+    }
+    return (cnt == V);
+}
+
+int main(){
+    int v, e, r; cin >> v >> e >> r;
+    Graph G(v);
+    vector<ll> dis;
+    REP(i,0,e){
+        ll a, b, c; cin >> a >> b >> c;
+        Edge e1 = {b, c};
+        Edge e2 = {a, c};
+        G[a].pb(e1);
+    }
+    if(bellman_ford(G, v, r, dis))
+        cout << "NEGATIVE CYCLE" << endl;
+    else{
+        REP(i,0,v){
+            if(dis[i] == INF)
+                cout << "INF" << endl;
+            else
+                cout << dis[i] << endl;
+        }
+    }
+}
