@@ -49,3 +49,7 @@ struct Edge {
 using Graph = vector<vector<Edge>>;
 
 const long long LINF = 1LL << 60;
+
+int main(){
+    
+}
