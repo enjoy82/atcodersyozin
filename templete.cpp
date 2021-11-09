@@ -50,8 +50,6 @@ vector<int> arg_sort(vector<int> &lis){
     return idx;
 }
 
-const long long LINF = 1LL << 60;
-
 char alpha[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 char Alpha[26] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 
@@ -60,8 +58,6 @@ int dy[4] = {0, 0, 1, -1};
 
 const long long LINF = 1LL << 62;
 const int INF = 1LL << 30;
-
-//cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
 
 int main(){
     
