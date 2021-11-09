@@ -20,12 +20,6 @@ using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statisti
 #define ALL(x) (x).begin(),(x).end()
 #define pb push_back
 
-struct Edge {
-    long long to;
-    long long cost;
-};
-using Graph = vector<vector<Edge>>;
-
 ll gcd(ll a,ll b){return b ? gcd(b,a%b) : a;}
 ll lcm(ll a,ll b){return a/gcd(a,b)*b;}
 
@@ -41,28 +35,20 @@ inline auto make_vec(size_t a, Ts... ts) {
     return vector<decltype(make_vec(ts...))>(a, make_vec(ts...));
 }
 
-vector<int> arg_sort(vector<int> &lis){
-    vector<int> idx(lis.size());
-    iota(ALL(idx), 0);
-    sort(ALL(idx), [&](auto &l, auto &r){
-        return lis[l] < lis[r];
-    });
-    return idx;
-}
-
-const long long LINF = 1LL << 60;
-
 char alpha[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 char Alpha[26] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 
 int dx[4] = {-1, 1, 0, 0};
 int dy[4] = {0, 0, 1, -1};
 
-const long long LINF = 1LL << 62;
-const int INF = 1LL << 30;
-
 //cout << std::fixed << std::setprecision(15) << y << endl; //小数表示
+struct Edge {
+    long long to;
+    long long cost;
+};
+using Graph = vector<vector<Edge>>;
+
+const long long LINF = 1LL << 60;
 
 int main(){
-    
 }
