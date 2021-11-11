@@ -118,10 +118,11 @@ ll kruskal(Graph &G, int v){
     ll res = 0;
     ll res2 = 0;
     REP(i,0,Edges.size()){
-        if(un.connect(Edges[i][0], Edges[i][1]))
+        if(un.connect(Edges[i][0], Edges[i][1])){
             res += -1 * Edges[i][2];
-        else
+        }else if(Edges[i][2] >= 0){
             res2 += Edges[i][2];
+        }
     }
     if(un.size(0) == v)
         return res2;
@@ -137,9 +138,7 @@ int main(){
         s--;
         t--;
         Edge e1 = {t, v};
-        Edge e2 = {s, v};
         G[s].pb(e1);
-        G[t].pb(e2);
     }
     cout << kruskal(G, v) << endl;
 }
