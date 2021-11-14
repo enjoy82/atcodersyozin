@@ -61,8 +61,30 @@ const int INF = 1LL << 30;
 
 int main(){
     int n, q; cin >> n >> q;
-    vector<pair<Pii, int> > query;
+    vector<int> front(n, -1), back(n, -1);
     REP(i,0,q){
         int a; cin >> a;
+        if(a == 1){
+            int x, y; cin >> x >> y;
+            x--; y--;
+            front[y] = x;
+            back[x] = y;
+        }else if(a == 2){
+            int x, y; cin >> x >> y;
+            x--; y--;
+        }else{
+            int now; cin >> now;
+            now--;
+            while(front[now] != -1){
+                now = front[now];
+            }
+            vector<int> lis;
+            while(back[now] != -1){
+                lis.pb(now);
+                now = back[now];
+            }
+            cout << lis.size() << " ";
+            REP()
+        }
     }
 }
