@@ -60,5 +60,9 @@ const long long LINF = 1LL << 62;
 const int INF = 1LL << 30;
 
 int main(){
-    
+    string s; cin >> s;
+    if(s[0] == 'e' && s[1] == 'r')
+        cout << "er" << endl;
+    else
+        cout << "i"
 }

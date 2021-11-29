@@ -60,5 +60,26 @@ const long long LINF = 1LL << 62;
 const int INF = 1LL << 30;
 
 int main(){
-    
+    int h, w; cin >> h >> w;
+    vector<vector<int> > lis(h, vector<int>(w));
+    REP(i,0,h){
+        REP(l,0,w){
+            cin >> lis[i][l];
+        }
+    }
+    bool f = true;
+    REP(i1,0,h){
+        REP(i2, i1+1, h){
+            REP(j1, 0, w){
+                REP(j2, j1+1, w){
+                    if(!(lis[i1][j1] + lis[i2][j2] <= lis[i2][j1] + lis[i1][j2]))
+                        f = false;
+                } 
+            }
+        }
+    }
+    if(f)
+        cout << "Yes" << endl;
+    else    
+        cout << "No" << endl;
 }

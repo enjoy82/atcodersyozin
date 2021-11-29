@@ -59,6 +59,54 @@ int dy[4] = {0, 0, 1, -1};
 const long long LINF = 1LL << 62;
 const int INF = 1LL << 30;
 
+vector<vector<int> > graph(9);
+
+void swap(int &x, int y){
+    int a = x;
+    x = y;
+    y = a;
+}
+
 int main(){
-    
+    int m; cin >> m;
+    REP(i,0,m){
+        int a, b; cin >> a >> b;
+        a--; b--;
+        graph[a].pb(b);
+        graph[b].pb(a);
+    }
+    map<vector<int>, int> dp;
+    queue<vector<int> > que;
+    vector<int> init(8); //こまiがどのノードにいるか
+    REP(i,0,8){cin >> init[i]; init[i]--;}
+    que.push(init);
+    dp[init] = 0;
+    while(!que.empty()){
+        vector<int> lis = que.front();
+        vector<int> from_tree(9, -1); //のーどiにはどのこまがあるか
+        que.pop();
+        vector<int> used(9, false);
+        REP(i,0,lis.size()){
+            used[lis[i]] = true;
+            from_tree[lis[i]] = i;
+        }
+        int idx;
+        REP(i,0,used.size()){
+            if(!used[i])
+                idx = i;
+        }
+        REP(i,0,graph[idx].size()){
+            int next = graph[idx][i];
+            vector<int> cp = lis;
+            swap(cp[from_tree[next]], idx);
+            if(!dp.count(cp)){
+                dp[cp] = dp[lis] + 1;
+                que.push(cp);
+            }
+        }
+    }
+    if(!dp.count({0,1,2,3,4,5,6,7}))
+        cout << -1 << endl;
+    else
+        cout << dp[{0,1,2,3,4,5,6,7}] << endl;
 }

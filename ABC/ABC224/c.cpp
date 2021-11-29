@@ -60,5 +60,24 @@ const long long LINF = 1LL << 62;
 const int INF = 1LL << 30;
 
 int main(){
-    
+    ll n; cin >> n;
+    vector<Pii> lis(n);
+    ll ans = (n * (n-1) *(n-2)) / (3 * 2);
+    REP(i,0,n){
+        ll x, y; cin >> x >> y;
+        lis[i] = Pii(x, y);
+    }
+    REP(i,0,n){
+        REP(l,i+1,n){
+            REP(k,l+1,n){
+                ll vac1x = lis[l].first - lis[i].first;
+                ll vac1y = lis[l].second - lis[i].second;
+                ll vac2x = lis[k].first - lis[i].first;
+                ll vac2y = lis[k].second - lis[i].second;
+                if(vac1x * vac2y - vac1y * vac2x == 0)
+                    ans--;
+            }
+        }
+    }
+    cout << ans << endl;
 }
