@@ -61,14 +61,34 @@ const int INF = 1LL << 30;
 
 int main(){
     int n; cin >> n;
-    vector<int> used(n, 0);
+    vector<map<int, int>> mp(n);
     REP(i,0,n-1){
         int a, b; cin >> a >> b;
         a--; b--;
-        used[a]++;
-        used[b]++;
+        mp[a][b]++;
+        mp[b][a]++;
     }
+    int n1 = -1;
+    int f = 1;
     REP(i,0,n){
-        
+        int count = 0;
+        for(auto x:mp[i]){
+            count++;
+        }
+        if(count == n-1){
+            if(n1 != -1){
+                f = 0;
+            }else{
+                n1 = i;
+            }
+        }else if(count == 1){
+            continue;
+        }else{
+            f = 0;
+        }
     }
+    if(f && n1 != -1)
+        cout << "Yes" << endl;
+    else
+        cout << "No" << endl;
 }
