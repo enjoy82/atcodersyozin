@@ -153,7 +153,6 @@ int main(){
         ans += Bit.sum_sub(alis[i]) * Pow(2, i);
         ans %= mod;
         Bit.add(alis[i], Pow(div, i+1));
-        cout << Pow(div, i+1) << endl;
     }
     cout << ans << endl;
 }

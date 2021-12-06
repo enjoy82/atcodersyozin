@@ -70,6 +70,29 @@ int dy[4] = {0, 0, 1, -1};
 const long long LINF = 1LL << 62;
 const int INF = 1LL << 30;
 
+const ll MOD = 1e9+7;
+
+ll Pow(ll  x, ll n){
+  if(n == 0)
+    return 1;
+  if(n % 2 == 0)
+    return Pow(x * x % MOD, n / 2);
+  else
+    return x * Pow(x, n - 1) % MOD;
+}
+
+//逆元でもっておいて復元する
+ll modinv(ll a, ll mod) {
+    ll b = mod, u = 1, v = 0;
+    while (b) {
+        ll t = a / b;
+        a -= t * b; swap(a, b);
+        u -= t * v; swap(u, v);
+    }
+    u %= mod;
+    if (u < 0) u += mod;
+    return u;
+}
+
 int main(){
-    
 }
