@@ -1,4 +1,4 @@
-// execute g++ main.cpp -std=c++14 -I C:\Users\naoya\Desktop\code\Atcoder
+// execute g++-11 main.cpp -std=c++14 -I C:\Users\naoya\Desktop\code\Atcoder
 #include<bits/stdc++.h>
 //#include<atcoder/all>
 typedef long long ll;
@@ -41,13 +41,24 @@ inline auto make_vec(size_t a, Ts... ts) {
     return vector<decltype(make_vec(ts...))>(a, make_vec(ts...));
 }
 
-vector<int> arg_sort(vector<int> &lis){
+template <class T>
+vector<int> arg_sort(vector<T> &lis){
     vector<int> idx(lis.size());
     iota(ALL(idx), 0);
     sort(ALL(idx), [&](auto &l, auto &r){
         return lis[l] < lis[r];
     });
     return idx;
+}
+
+template <class T>
+int compression(vector<T> &A){
+    std::map<T,int> mem;
+    for(auto p: A) mem[p] = 0;
+    int sz = 0;
+    for(auto &p: mem) p.second = sz++;
+    for(auto &p: A) p = mem[p];
+    return sz;
 }
 
 char alpha[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
