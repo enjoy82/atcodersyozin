@@ -94,26 +94,13 @@ ll modinv(ll a, ll mod) {
     return u;
 }
 
-
-
 int main(){
-    int n, d; cin >> n >> d;
-    vector<Pll> lis(n);
-    REP(i,0,n){
-        ll a, b; cin >> a >> b;
-        lis[i] = Pll(a, b);
+    ll n; cin >> n;
+    ll ans = 0;
+    ll i = 1;
+    for(; n >= i * i; i++){
+        ans += (n / i) * 2;
     }
-    sort(ALL(lis), [](auto &x, auto &y){return x.second < y.second;});
-    ll pre = lis[0].second;
-    int count = 1;
-    REP(i,0,n){
-        if(lis[i].first < pre + d){
-            continue;
-        }
-        if(lis[i].second - pre + 1 > d){
-            pre = lis[i].second;
-            count++;
-        }
-    }
-    cout << count << endl;
+    i--;
+    cout << ans - (i*i) << endl;
 }
