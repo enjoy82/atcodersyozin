@@ -20,7 +20,7 @@ int main(){
     ll ans = 0, sum = 0;
     vector<ll> lis(n);
     REP(i, 0, n){cin >> lis[i];}
-    int  r = 0; //rを滑らすので計算量落ちる
+    int r = 0; //rを滑らすので計算量落ちる
     REP(l, 0, n){//lを固定
         while(sum < k){
             if(r == n){

@@ -72,13 +72,13 @@ const int INF = 1LL << 30;
 
 const ll MOD = 1e9+7;
 
-ll Pow(ll  x, ll n){
+ll modpow(ll  x, ll n){
   if(n == 0)
     return 1;
   if(n % 2 == 0)
-    return Pow(x * x % MOD, n / 2);
+    return modpow(x * x % MOD, n / 2);
   else
-    return x * Pow(x, n - 1) % MOD;
+    return x * modpow(x, n - 1) % MOD;
 }
 
 //逆元でもっておいて復元する
