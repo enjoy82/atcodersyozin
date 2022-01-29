@@ -94,84 +94,51 @@ ll modinv(ll a, ll mod) {
     return u;
 }
 
+string ans = "";
 
-class UnionFind{
-    public:
-        vector<int> uni; //直接根いじるとき注意！root変わる！
-        UnionFind(int s) : uni(s, -1) { }
- 
-       //頂点aが所属するグループを調べる
-        int root(int a)
-        {
-            if (uni[a] < 0) return a;
-            return uni[a] = root(uni[a]);
+void solve(int bnum, ll num, vector<vector<ll> > &dp){
+    if(bnum == 0){
+        return;
+    }
+    //cout <<  ans << endl;
+    //cout << bnum << num << endl;
+    REP(i,0,70){
+        if(dp[i][bnum-1] >= num){
+            ans[ans.size()-i-1] = 'b';
+            //cout << ans << endl;
+            if(bnum-1 == 0)
+                return;
+            solve(bnum-1, num-dp[i-1][bnum-1], dp);
+            return;
         }
-    
-        //頂点aと頂点bを繋ぐ。もともと同じグループの時falseを返す
-        bool connect(int a,int b)
-        {
-            a = root(a);
-            b = root(b);
-            if (a == b) return false;
-    
-            if (uni[a] > uni[b])
-            {
-                a ^= b;
-                b ^= a;
-                a ^= b;
-            }
-    
-            uni[a] = uni[a] + uni[b];
-            uni[b] = a;
-            return true;
-        }
-    
-        //頂点a,bが同じグループであるかを調べる
-        bool isConnect(int a,int b)
-        {
-            return root(a) == root(b);
-        }
-    
-        //頂点aを含むグループの頂点数を調べる
-        int size(int a)
-        {
-            return -uni[root(a)];
-        }
-    
-    };
+    }
+}
 
 int main(){
-    int n, m; cin >> n >> m;
-    vector<vector<int> > lis(n);
-    UnionFind un(n+1);
-    REP(i,0,m){
-        int a, b; cin >> a >> b;
-        a--;
-        b--;
-        lis[b].pb(a);
-        lis[a].pb(b);
-    }
-    REP(i,0,n){
-        sort(ALL(lis[i]), greater<>());
-    }
-    vector<int> anslis;
-    ll ans = 0;
-    for(int i = n-1; i >= 0; i--){
-        set<int> st;
-        REP(l,0,lis[i].size()){
-            int next = lis[i][l];
-            if(next < i)
-                break;
-            st.insert(un.root(next));
-            un.connect(next, i);
+    int a, b; cin >> a >>  b;
+    ll k; cin >> k;
+    vector<vector<ll> > dp(70, vector<ll>(35, 0));
+    dp[0][0] = 1;
+    REP(i,0,68){
+        REP(l,0,33){
+            if(dp[i][l] != 0){
+                dp[i+1][l] += dp[i][l];
+                dp[i+1][l+1] += dp[i][l];
+            }
         }
-        ans += 1 - st.size();
-        anslis.pb(ans);
+        dp[i+1][0] += 1;
     }
-    
-    REP(i,1,anslis.size()){
-        cout << anslis[anslis.size()-1-i] << endl;
+    REP(i,0,a+b){
+        ans = ans + 'a';
     }
-    cout << 0 << endl;
-    return 0;
+    /*
+    REP(i,0,5){
+        REP(l,0,4){
+            cout << dp[i][l] << " ";
+        }
+        cout << endl;
+    }
+    */
+    solve(b, k, dp);
+    cout << ans << endl;
 }
